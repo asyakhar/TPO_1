@@ -1,4 +1,4 @@
-package com.task3;
+package com.task3.domain;
 
 import java.util.Objects;
 
