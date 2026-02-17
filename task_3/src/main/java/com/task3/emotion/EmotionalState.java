@@ -46,7 +46,7 @@ public class EmotionalState {
     public static class Builder {
         private final Set<EmotionType> types = new HashSet<>();
         private Intensity intensity = Intensity.COMPLETE;
-        private Human target;
+        private Character target;
 
         public Builder addEmotion(EmotionType type) {
             this.types.add(type);
@@ -63,7 +63,7 @@ public class EmotionalState {
             return this;
         }
 
-        public Builder target(Human target) {
+        public Builder target(Character target) {
             this.target = target;
             return this;
         }

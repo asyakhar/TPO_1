@@ -1,16 +1,17 @@
-package com.marvin.test;
 
-import com.marvin.domain.Human;
-import com.marvin.domain.Marvin;
-import com.marvin.domain.action.Action;
-import com.marvin.domain.action.ActionType;
-import com.marvin.domain.action.CalculationLevel;
-import com.marvin.domain.emotion.EmotionalState;
-import com.marvin.domain.emotion.EmotionType;
-import com.marvin.domain.emotion.Intensity;
-import com.marvin.domain.expression.Expression;
-import com.marvin.domain.factory.ExpressionFactory;
-import com.marvin.domain.factory.ExpressionValidator;
+
+
+import com.task3.action.Action;
+import com.task3.action.ActionType;
+import com.task3.action.CalculationLevel;
+import com.task3.domain.Human;
+import com.task3.domain.Marvin;
+import com.task3.emotion.EmotionType;
+import com.task3.emotion.EmotionalState;
+import com.task3.emotion.Intensity;
+import expression.Expression;
+import expression.ExpressionFactory;
+import expression.ExpressionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -101,7 +102,7 @@ public class MarvinTest {
         assertEquals("Человечество", emotion.getTarget().getName());
 
         // Валидируем через валидатор
-        ExpressionValidator.ValidationResult result = 
+        ExpressionValidator.ValidationResult result =
                 ExpressionValidator.validate(expression);
         
         assertTrue(result.isValid());
