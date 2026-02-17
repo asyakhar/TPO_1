@@ -9,9 +9,9 @@ import com.task3.domain.Marvin;
 import com.task3.emotion.EmotionType;
 import com.task3.emotion.EmotionalState;
 import com.task3.emotion.Intensity;
-import expression.Expression;
-import expression.ExpressionFactory;
-import expression.ExpressionValidator;
+import com.task3.expression.Expression;
+import com.task3.expression.ExpressionFactory;
+import com.task3.expression.ExpressionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
