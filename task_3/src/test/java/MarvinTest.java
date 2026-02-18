@@ -1,6 +1,3 @@
-
-
-
 import com.task3.action.Action;
 import com.task3.action.ActionType;
 import com.task3.action.CalculationLevel;
