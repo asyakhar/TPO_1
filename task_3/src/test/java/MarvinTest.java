@@ -71,34 +71,33 @@ public class MarvinTest {
 
     @Test
     void shouldCreateSarcasticContemptExpression() {
-        // Используем фабрику для создания выражения
+
         Expression expression = ExpressionFactory.createSarcasticContemptExpression();
 
-        // Проверяем исполнителя
+
         assertEquals(marvin, expression.getPerformer());
         
-        // Проверяем действия
+
         List<Action> actions = expression.getActions();
         assertEquals(3, actions.size());
-        
-        // Проверяем типы действий
+
         assertTrue(actions.stream().anyMatch(a -> a.getType() == ActionType.PAUSE));
         assertTrue(actions.stream().anyMatch(a -> a.getType() == ActionType.INTONATION_MODULATION));
         assertTrue(actions.stream().anyMatch(a -> a.getType() == ActionType.TIMBRE_MODULATION));
         
-        // Проверяем, что все действия имеют тщательный расчет
+
         actions.forEach(action -> 
             assertEquals(CalculationLevel.THOROUGH, action.getCalculationLevel())
         );
 
-        // Проверяем эмоциональное состояние
+
         EmotionalState emotion = expression.getConveyedEmotion();
         assertTrue(emotion.containsEmotion(EmotionType.CONTEMPT));
         assertTrue(emotion.containsEmotion(EmotionType.HORROR));
         assertEquals(Intensity.COMPLETE, emotion.getIntensity());
         assertEquals("Человечество", emotion.getTarget().getName());
 
-        // Валидируем через валидатор
+
         ExpressionValidator.ValidationResult result =
                 ExpressionValidator.validate(expression);
         
@@ -143,5 +142,18 @@ public class MarvinTest {
         });
 
         assertTrue(exception.getMessage().contains("Длительность не может быть null"));
+    }
+    @Test
+    void expressionShouldNotContainOffensiveActions() {
+
+        Expression expression = ExpressionFactory.createSarcasticContemptExpression();
+
+        List<Action> actions = expression.getActions();
+
+        assertTrue(actions.stream().allMatch(a ->
+                a.getType() == ActionType.PAUSE ||
+                        a.getType() == ActionType.INTONATION_MODULATION ||
+                        a.getType() == ActionType.TIMBRE_MODULATION
+        ));
     }
 }
