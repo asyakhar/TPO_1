@@ -42,7 +42,7 @@ public class HashTableWithTrace {
 		tracePoints.add(TP_HASH_COMPUTED);
 		int hash = key.charAt(key.length() - 1);
 		for (int i = key.length() - 2; i > -1; i--) {
-			System.out.println(hash + " " + key.charAt(i));
+
 			hash = (16 * hash + key.charAt(i));
 		}
 		return hash;
@@ -56,11 +56,10 @@ public class HashTableWithTrace {
 			return;
 		}
 
-		int summ = hash(key);
-		int hash = summ % capacity;
-		tracePoints.add(TP_INDEX_CALCULATED + ":" + hash);
+		int summa = hash(key);
+		int index = summa % capacity;
+		tracePoints.add(TP_INDEX_CALCULATED + ":" + index);
 
-		int index = hash;
 		int i = 0;
 
 		tracePoints.add(TP_FOUND_START);
@@ -76,7 +75,7 @@ public class HashTableWithTrace {
 				tracePoints.add(TP_CELL_OCCUPIED + ":" + index + ":" + table[index]);
 				tracePoints.add(TP_COLLISION + ":" + index);
 				i++;
-				index = (index + (7 - summ % 7)) % capacity;
+				index = (index + (7 - summa % 7)) % capacity;
 				tracePoints.add(TP_FOUND_NEXT + ":" + index);
 			}
 		}
@@ -87,11 +86,10 @@ public class HashTableWithTrace {
 	public boolean search(String key) {
 		tracePoints.add(TP_START + ":search(" + key + ")");
 
-		int summ = hash(key);
-		int hash = summ % capacity;
-		tracePoints.add(TP_INDEX_CALCULATED + ":" + hash);
+		int summa = hash(key);
+		int index = summa % capacity;
+		tracePoints.add(TP_INDEX_CALCULATED + ":" + index);
 
-		int index = hash;
 		int i = 0;
 
 		tracePoints.add(TP_FOUND_START);
@@ -109,7 +107,7 @@ public class HashTableWithTrace {
 				tracePoints.add(TP_CELL_OCCUPIED + ":" + index + ":" + table[index]);
 				tracePoints.add(TP_COLLISION + ":" + index);
 				i++;
-				index = (index + (7 - summ % 7)) % capacity;
+				index = (index + (7 - summa % 7)) % capacity;
 				tracePoints.add(TP_FOUND_NEXT + ":" + index);
 			}
 		}
@@ -121,8 +119,8 @@ public class HashTableWithTrace {
 	public boolean delete(String key) {
 		tracePoints.add(TP_START + ":delete(" + key + ")");
 
-		int summ = hash(key);
-		int index = summ % capacity;
+		int summa = hash(key);
+		int index = summa % capacity;
 		tracePoints.add(TP_INDEX_CALCULATED + ":" + index);
 		int i = 0;
 		tracePoints.add(TP_FOUND_START);
@@ -142,7 +140,7 @@ public class HashTableWithTrace {
 				tracePoints.add(TP_CELL_OCCUPIED + ":" + index + ":" + table[index]);
 				tracePoints.add(TP_COLLISION + ":" + index);
 				i++;
-				index = (index + (7 - summ % 7)) % capacity;
+				index = (index + (7 - summa % 7)) % capacity;
 				tracePoints.add(TP_FOUND_NEXT + ":" + index);
 			}
 		}
@@ -152,7 +150,7 @@ public class HashTableWithTrace {
 	}
 
 	public boolean validateTable() {
-		System.out.println("\n=== Проверка корректности таблицы ===");
+		System.out.println("\nПроверка корректности таблицы");
 		boolean isValid = true;
 
 		for (int i = 0; i < capacity; i++) {
