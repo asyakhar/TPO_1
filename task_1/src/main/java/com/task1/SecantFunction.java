@@ -1,103 +1,159 @@
 package com.task1;
 
-
 public class SecantFunction {
 
+    private static final double PI_HALF = Math.PI / 2.0;
+    private static final double EPS_SINGULAR = 1e-12;
+
     public static double sec(double x) {
-        if (Double.isNaN(x)) {
-            return Double.NaN;
-        }
-        if (Double.isInfinite(x)) {
-            return Double.NaN;
-        }
-
-        if (Math.abs(x) >= Math.PI / 2) {
-            throw new IllegalArgumentException(
-                    "Аргумент должен быть в интервале (-π/2, π/2) для разложения в ряд Тейлора");
-        }
-
-        return 1.0 / Math.cos(x);
+        return sec(x, 100);
     }
 
-    public static double secTaylor(double x, int terms) {
-        if (Double.isNaN(x)) {
-            return Double.NaN;
-        }
-        if (Double.isInfinite(x)) {
+    public static double sec(double x, int n) {
+        if (Double.isNaN(x) || Double.isInfinite(x)) {
             return Double.NaN;
         }
 
-        if (Math.abs(x) >= Math.PI / 2) {
-            throw new IllegalArgumentException(
-                    "Аргумент должен находиться в интервале (-π/2, π/2) для разложения в ряд Тейлора");
+        
+        double absX = Math.abs(x);
+
+        
+        if (absX >= PI_HALF - EPS_SINGULAR) {
+            return Double.NaN;
         }
 
-        double result = 0.0;
-        double xPow = 1.0;
-
-        double[] eulers = getAllEulerNumbers(terms);
-
-
-        System.out.println("Числа Эйлера (E2n):");
-        for (int n = 0; n < terms; n++) {
-            System.out.printf("E%d = %.0f%n", 2*n, eulers[n]);
+        
+        if (absX < 1e-10) {
+            return 1.0;
         }
 
-        for (int n = 0; n < terms; n++) {
-
-            double coefficient = Math.abs(eulers[n]) / factorial(2 * n);
-            result += coefficient * xPow;
-            xPow *= x * x;
-
-            System.out.printf("n=%d, E=%f, coeff=%f, term=%f, result=%f%n",
-                    n, eulers[n], coefficient, coefficient * Math.pow(x, 2*n), result);
+        
+        if (absX > 1.4) {
+            return computeSecNearBoundary(x, n);
         }
 
-        return result;
+        
+        return computeSecSeries(absX, n);
     }
 
-    private static double[] getAllEulerNumbers(int terms) {
-        double[] E = new double[terms];
-        E[0] = 1.0; // E0 соответствует E(0)
+    private static double computeSecNearBoundary(double x, int n) {
+        
+        
 
-        if (terms > 1) {
-            E[1] = -1.0; // E2 = -1
+        double delta = PI_HALF - Math.abs(x);
+
+        
+        if (delta < 1e-8) {
+            return 1.0 / delta;
         }
 
-        for (int n = 2; n < terms; n++) {
-            double sum = 0;
-            // E(2n) = - sum_{k=0}^{n-1} C(2n, 2k) * E(2k)
-            for (int k = 0; k < n; k++) {
-                double comb = combination(2 * n, 2 * k);
-                sum += comb * E[k];
+        
+        double sinDelta = computeSinSeries(delta, n);
+
+        
+        return 1.0 / sinDelta;
+    }
+
+    private static double computeSinSeries(double x, int maxTerms) {
+        
+        double sum = x;
+        double term = x;
+        double x2 = x * x;
+
+        for (int i = 1; i <= maxTerms; i++) {
+            term *= -x2 / ((2 * i) * (2 * i + 1));
+            sum += term;
+
+            if (Math.abs(term) < 1e-16 * Math.abs(sum)) {
+                break;
             }
-            E[n] = -sum;
         }
 
-        return E;
+        return sum;
+    }
+
+    private static double computeSecSeries(double x, int maxTerms) {
+        double sum = 1.0;
+        double x2 = x * x;
+        double powerX = 1.0;
+
+        
+        double[] euler = new double[maxTerms + 1];
+        euler[0] = 1.0;
+
+        for (int i = 1; i <= maxTerms; i++) {
+            int twoN = 2 * i;
+
+            
+            double sumE = 0.0;
+            for (int k = 0; k < i; k++) {
+                double comb = combination(twoN, 2 * k);
+                sumE += comb * euler[k];
+
+                if (Double.isInfinite(sumE)) {
+                    break;
+                }
+            }
+
+            euler[i] = -sumE;
+
+            if (Double.isInfinite(euler[i])) {
+                break;
+            }
+
+            powerX *= x2;
+
+            
+            double logTerm = Math.log(Math.abs(euler[i])) + Math.log(powerX) - logFactorial(twoN);
+
+            if (logTerm < -700) { 
+                break;
+            }
+
+            double term = Math.exp(logTerm);
+            sum += term;
+
+            
+            if (term < 1e-16 * sum) {
+                break;
+            }
+        }
+
+        return sum;
     }
 
     private static double combination(int n, int k) {
         if (k < 0 || k > n) return 0;
-        if (k == 0 || k == n) return 1;
+        if (k == 0 || k == n) return 1.0;
 
-        double result = 1;
         k = Math.min(k, n - k);
 
+        
+        if (n > 50) {
+            double logComb = 0.0;
+            for (int i = 1; i <= k; i++) {
+                logComb += Math.log(n - k + i) - Math.log(i);
+            }
+            return Math.exp(logComb);
+        }
+
+        
+        double res = 1.0;
         for (int i = 1; i <= k; i++) {
-            result = result * (n - k + i) / i;
+            res = res * (n - k + i) / i;
         }
-
-        return result;
+        return res;
     }
 
-    private static double factorial(int n) {
-        if (n == 0) return 1.0;
-        double result = 1.0;
+    private static double logFactorial(int n) {
+        if (n <= 1) return 0.0;
+
+        double logFact = 0.0;
         for (int i = 2; i <= n; i++) {
-            result *= i;
+            logFact += Math.log(i);
         }
-        return result;
+        return logFact;
     }
+    
 
 }
