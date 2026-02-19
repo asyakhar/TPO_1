@@ -12,7 +12,7 @@ public class SecantFunctionTest {
     private static final double EPSILON = 1e-10;
     private static final double BOUNDARY = Math.PI / 2;
 
-    // Эталон для сравнения (используем Math.cos только в тестах!)
+    // Эталон для сравнения
     private static double referenceSec(double x) {
         return 1.0 / Math.cos(x);
     }
@@ -83,18 +83,13 @@ public class SecantFunctionTest {
     @Test
     public void testSecNearPositiveBoundary() {
         double x = 1.5707;
-
-        // Используем больше членов ряда для близких к границе значений
-        int terms = 100; // достаточно для точности
+        int terms = 100;
         double actual = SecantFunction.sec(x, terms);
         double expected = referenceSec(x);
 
-        // Проверяем, что результат конечный и положительный
         assertFalse(Double.isNaN(actual), "sec(1.5707) не должен быть NaN");
         assertTrue(actual > 0, "sec(1.5707) должен быть положительным");
 
-
-        // Относительная погрешность
         double relativeError = Math.abs((actual - expected) / expected);
         assertTrue(relativeError < 1e-6,
                 String.format("Погрешность: %e "+actual+" "+expected, relativeError));
@@ -305,7 +300,6 @@ public class SecantFunctionTest {
 
     @Test
     public void testSecBoundaryValues() {
-        // Тестирование значений, близких к границе с разных сторон
         double step = 1e-7;
         double justBelow = BOUNDARY - step;
         double justAbove = BOUNDARY + step;
@@ -315,7 +309,6 @@ public class SecantFunctionTest {
         assertTrue(Double.isNaN(SecantFunction.sec(justAbove)),
                 "sec чуть выше границы должен быть NaN");
 
-        // Проверка симметрии для отрицательной границы
         double negativeJustAbove = -BOUNDARY + step;
         double negativeJustBelow = -BOUNDARY - step;
 

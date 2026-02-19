@@ -42,7 +42,6 @@ public class HashTableWithTrace {
 		tracePoints.add(TP_HASH_COMPUTED);
 		int hash = key.charAt(key.length() - 1);
 		for (int i = key.length() - 2; i > -1; i--) {
-
 			hash = (16 * hash + key.charAt(i));
 		}
 		return hash;
@@ -79,7 +78,6 @@ public class HashTableWithTrace {
 				tracePoints.add(TP_FOUND_NEXT + ":" + index);
 			}
 		}
-		System.out.println(index);
 		tracePoints.add(TP_TABLE_FULL);
 	}
 
@@ -147,52 +145,6 @@ public class HashTableWithTrace {
 
 		tracePoints.add(TP_SEARCH_NOT_FOUND);
 		return false;
-	}
-
-	public boolean validateTable() {
-		System.out.println("\nПроверка корректности таблицы");
-		boolean isValid = true;
-
-		for (int i = 0; i < capacity; i++) {
-			String value = table[i];
-			if (value == null || value.equals("DELETED")) {
-				continue;
-			}
-
-			int expectedIndex = hash(value);
-			int currentIndex = i;
-
-			if (expectedIndex == currentIndex) {
-				System.out.println("[" + i + "] = " + value + " (на своём месте)");
-			} else {
-				boolean foundInProbing = false;
-				int probeIndex = expectedIndex;
-				int step = 0;
-
-				// Ищем, должен ли этот элемент быть на текущей позиции
-				while (step < capacity) {
-					if (probeIndex == currentIndex) {
-						foundInProbing = true;
-						break;
-					}
-					if (table[probeIndex] == null || table[probeIndex].equals(value)) {
-						break;
-					}
-					step++;
-					probeIndex = (expectedIndex + step) % capacity;
-				}
-
-				if (foundInProbing) {
-					System.out.println("  ✓ [" + i + "] = " + value + " (корректная позиция после коллизии, ожидался ["
-							+ expectedIndex + "])");
-				} else {
-					System.out.println("  ✗ [" + i + "] = " + value + " (НЕКОРРЕКТНАЯ ПОЗИЦИЯ! Должен быть в ["
-							+ expectedIndex + "] или в цепочке пробирования)");
-					isValid = false;
-				}
-			}
-		}
-		return isValid;
 	}
 
 	public void printTable() {

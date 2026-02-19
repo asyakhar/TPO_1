@@ -10,7 +10,7 @@ import com.task3.emotion.EmotionalState;
 
 public class ExpressionFactory {
 
-    public static Expression createSarcasticContemptExpression() {
+    public static Expression createSarcasticExpression() {
         Marvin marvin = new Marvin();
         Human humanity = new Human("Человечество");
 

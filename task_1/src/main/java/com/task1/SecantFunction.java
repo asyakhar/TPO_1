@@ -13,43 +13,33 @@ public class SecantFunction {
         if (Double.isNaN(x) || Double.isInfinite(x)) {
             return Double.NaN;
         }
-
         
         double absX = Math.abs(x);
 
-        
         if (absX >= PI_HALF - EPS_SINGULAR) {
             return Double.NaN;
         }
-
         
         if (absX < 1e-10) {
             return 1.0;
         }
 
-        
         if (absX > 1.4) {
             return computeSecNearBoundary(x, n);
         }
 
-        
         return computeSecSeries(absX, n);
     }
 
     private static double computeSecNearBoundary(double x, int n) {
-        
-        
 
         double delta = PI_HALF - Math.abs(x);
-
         
         if (delta < 1e-8) {
             return 1.0 / delta;
         }
-
         
         double sinDelta = computeSinSeries(delta, n);
-
         
         return 1.0 / sinDelta;
     }
@@ -77,14 +67,12 @@ public class SecantFunction {
         double x2 = x * x;
         double powerX = 1.0;
 
-        
         double[] euler = new double[maxTerms + 1];
         euler[0] = 1.0;
 
         for (int i = 1; i <= maxTerms; i++) {
             int twoN = 2 * i;
 
-            
             double sumE = 0.0;
             for (int k = 0; k < i; k++) {
                 double comb = combination(twoN, 2 * k);
@@ -127,7 +115,6 @@ public class SecantFunction {
         if (k == 0 || k == n) return 1.0;
 
         k = Math.min(k, n - k);
-
         
         if (n > 50) {
             double logComb = 0.0;
