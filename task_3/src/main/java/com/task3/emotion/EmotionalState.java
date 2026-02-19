@@ -12,7 +12,7 @@ public class EmotionalState {
     private final Character target;
 
     private EmotionalState(Builder builder) {
-        this.types = Collections.unmodifiableSet(new HashSet<>(builder.types));
+        this.types = new HashSet<>(builder.types);
         this.intensity = builder.intensity;
         this.target = builder.target;
         validate();

@@ -18,7 +18,7 @@ public class Expression {
     private Expression(Builder builder) {
         this.id = UUID.randomUUID();
         this.performer = builder.performer;
-        this.actions = Collections.unmodifiableList(new ArrayList<>(builder.actions));
+        this.actions = builder.actions;
         this.conveyedEmotion = builder.conveyedEmotion;
         validate();
     }

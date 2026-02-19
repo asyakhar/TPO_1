@@ -74,9 +74,7 @@ public class MarvinTest {
 
         Expression expression = ExpressionFactory.createSarcasticContemptExpression();
 
-
         assertEquals(marvin, expression.getPerformer());
-        
 
         List<Action> actions = expression.getActions();
         assertEquals(3, actions.size());
@@ -147,7 +145,6 @@ public class MarvinTest {
     void expressionShouldNotContainOffensiveActions() {
 
         Expression expression = ExpressionFactory.createSarcasticContemptExpression();
-
         List<Action> actions = expression.getActions();
 
         assertTrue(actions.stream().allMatch(a ->

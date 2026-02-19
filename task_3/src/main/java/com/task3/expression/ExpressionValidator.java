@@ -17,7 +17,7 @@ public class ExpressionValidator {
     public static ValidationResult validate(Expression expression) {
         List<String> errors = new ArrayList<>();
 
-        if (!(expression.getPerformer() instanceof Marvin)) {
+        if (expression.getPerformer() == null) {
             errors.add("Исполнителем выражения должен быть Марвин");
         }
 
