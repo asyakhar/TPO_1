@@ -2,16 +2,16 @@
 import java.util.Arrays;
 import java.util.List;
 
-import com.example.HashTableWithTrace;
+import com.example.HashTable;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TableTest {
 
-    private HashTableWithTrace hashTable;
+    private HashTable hashTable;
     public void setUp(int count) {
-        hashTable = new HashTableWithTrace(count);
+        hashTable = new HashTable(count);
     }
 
     @Test
@@ -19,11 +19,11 @@ public class TableTest {
     public void testInsertNoCollision() {
         System.out.println("\nТЕСТ: Вставка без коллизии ");
         setUp(29);
-        hashTable.clearTrace();
+        hashTable.clearSequence();
         hashTable.insert("A");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:insert(A)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:7",
@@ -31,7 +31,7 @@ public class TableTest {
                 "CELL_EMPTY:7",
                 "INSERT_SUCCESS:7"
         );
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Вставка с коллизией")
@@ -40,11 +40,11 @@ public class TableTest {
         setUp(29);
 
         hashTable.insert("1");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
         hashTable.insert("N");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:insert(N)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:20",
@@ -55,7 +55,7 @@ public class TableTest {
                 "CELL_EMPTY:26",
                 "INSERT_SUCCESS:26"
         );
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Вставка с двойной коллизией")
@@ -64,13 +64,13 @@ public class TableTest {
         setUp(29);
 
         hashTable.insert("1");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
         hashTable.insert("1");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
         hashTable.insert("1");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:insert(1)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:20",
@@ -84,7 +84,7 @@ public class TableTest {
                 "CELL_EMPTY:5",
                 "INSERT_SUCCESS:5"
         );
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
 
     @Test
@@ -94,14 +94,14 @@ public class TableTest {
         setUp(29);
 
         hashTable.insert("cat");
-        hashTable.clearTrace();
-        for (String point : hashTable.getTracePoints()) {
+        hashTable.clearSequence();
+        for (String point : hashTable.getSequencePoints()) {
             System.out.println("  " + point);
         }
         boolean found = hashTable.search("cat");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:search(cat)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:27",
@@ -111,7 +111,7 @@ public class TableTest {
         );
 
         System.out.println("Результат поиска: " + found);
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Поиск несуществующего элемента")
@@ -120,12 +120,12 @@ public class TableTest {
         setUp(29);
 
         hashTable.insert("itmo");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
 
         boolean found = hashTable.search("vt");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:search(vt)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:2",
@@ -135,7 +135,7 @@ public class TableTest {
         );
 
         System.out.println("Результат поиска: " + found);
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Удаление элемента")
@@ -144,12 +144,12 @@ public class TableTest {
         setUp(29);
 
         hashTable.insert("itmo");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
 
         boolean deleted = hashTable.delete("itmo");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:delete(itmo)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:18",
@@ -159,7 +159,7 @@ public class TableTest {
         );
 
         System.out.println("Результат удаления: " + deleted);
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Удаление несуществующего элемента")
@@ -169,8 +169,8 @@ public class TableTest {
 
         boolean deleted = hashTable.delete("itmo");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:delete(itmo)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:18",
@@ -180,7 +180,7 @@ public class TableTest {
         );
 
         System.out.println("Результат удаления: " + deleted);
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
 
     @Test
@@ -189,13 +189,13 @@ public class TableTest {
         System.out.println("\nТЕСТ: Удаление элемента с коллизиями");
         setUp(29);
         hashTable.insert("itmo");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
         hashTable.insert("/");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
         boolean deleted = hashTable.delete("/");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:delete(/)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:18",
@@ -208,7 +208,7 @@ public class TableTest {
         );
 
         System.out.println("Результат удаления: " + deleted);
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Множественные коллизии")
@@ -219,12 +219,12 @@ public class TableTest {
         hashTable.insert("1");
         hashTable.insert("7");
         hashTable.insert("=");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
 
         hashTable.insert("N");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:insert(N)",
                 "HASH_COMPUTED",
                 "INDEX_CALCULATED:20",
@@ -241,7 +241,7 @@ public class TableTest {
                 "CELL_EMPTY:9",
                 "INSERT_SUCCESS:9"
         );
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
     }
     @Test
     @DisplayName("Переполнение таблицы")
@@ -254,20 +254,20 @@ public class TableTest {
         hashTable.insert("C");
         hashTable.insert("D");
         hashTable.insert("E");
-        hashTable.clearTrace();
+        hashTable.clearSequence();
 
         hashTable.insert("F");
 
-        List<String> actualTrace = hashTable.getTracePoints();
-        List<String> expectedTrace = Arrays.asList(
+        List<String> actualSequence = hashTable.getSequencePoints();
+        List<String> expectedSequence = Arrays.asList(
                 "START:insert(F)",
                 "TABLE_FULL"
         );
-        compareTraces(expectedTrace, actualTrace);
+        compareSequences(expectedSequence, actualSequence);
 
     }
 
-    private void compareTraces(List<String> expected, List<String> actual) {
+    private void compareSequences(List<String> expected, List<String> actual) {
         System.out.println("Ожидаемая трассировка:");
         expected.forEach(s -> System.out.println("  " + s));
 
