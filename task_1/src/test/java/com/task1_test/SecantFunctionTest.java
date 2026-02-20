@@ -254,8 +254,6 @@ public class SecantFunctionTest {
 
         for (int i = 0; i < iterations; i++) {
             double x = min + (max - min) * random.nextDouble();
-
-            // Пропускаем точки слишком близкие к границе
             if (Math.abs(Math.abs(x) - BOUNDARY) < 1e-8) {
                 continue;
             }

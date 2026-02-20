@@ -24,7 +24,7 @@ public class SecantFunction {
             return 1.0;
         }
 
-        if (absX > 1.4) {
+        if (absX >= 1.4) {
             return computeSecNearBoundary(x, n);
         }
 
