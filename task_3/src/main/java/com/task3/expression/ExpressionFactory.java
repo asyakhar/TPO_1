@@ -1,6 +1,5 @@
 package com.task3.expression;
 
-
 import com.task3.action.Action;
 import com.task3.action.ActionType;
 import com.task3.domain.Human;
@@ -29,6 +28,30 @@ public class ExpressionFactory {
         EmotionalState emotion = new EmotionalState.Builder()
                 .addEmotions(EmotionType.CONTEMPT, EmotionType.HORROR)
                 .target(humanity)
+                .build();
+
+        return new Expression.Builder()
+                .performer(marvin)
+                .addActions(pause, intonationMod, timbreMod)
+                .conveyedEmotion(emotion)
+                .build();
+    }
+
+    /**
+     * Новый метод: создает выражение на основе указанного эмоционального состояния
+     */
+    public static Expression createExpressionWithEmotion(Marvin marvin, EmotionalState emotion) {
+
+        Action pause = new Action.Builder()
+                .type(ActionType.PAUSE)
+                .build();
+
+        Action intonationMod = new Action.Builder()
+                .type(ActionType.INTONATION_MODULATION)
+                .build();
+
+        Action timbreMod = new Action.Builder()
+                .type(ActionType.TIMBRE_MODULATION)
                 .build();
 
         return new Expression.Builder()
