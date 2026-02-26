@@ -67,7 +67,7 @@ public class MarvinTest {
         Action action = new Action.Builder()
                 .type(ActionType.PAUSE)
                 .build();
-        
+
         assertEquals(CalculationLevel.THOROUGH, action.getCalculationLevel());
     }
 
@@ -84,10 +84,10 @@ public class MarvinTest {
         assertTrue(actions.stream().anyMatch(a -> a.getType() == ActionType.PAUSE));
         assertTrue(actions.stream().anyMatch(a -> a.getType() == ActionType.INTONATION_MODULATION));
         assertTrue(actions.stream().anyMatch(a -> a.getType() == ActionType.TIMBRE_MODULATION));
-        
 
-        actions.forEach(action -> 
-            assertEquals(CalculationLevel.THOROUGH, action.getCalculationLevel())
+
+        actions.forEach(action ->
+                assertEquals(CalculationLevel.THOROUGH, action.getCalculationLevel())
         );
 
 
@@ -100,7 +100,7 @@ public class MarvinTest {
 
         ExpressionValidator.ValidationResult result =
                 ExpressionValidator.validate(expression);
-        
+
         assertTrue(result.isValid());
     }
 
