@@ -35,6 +35,11 @@ public class Expression {
             if (action.getCalculationLevel() != CalculationLevel.THOROUGH) {
                 throw new IllegalStateException("Все действия должны быть тщательно рассчитаны");
             }
+
+            if (action.getType().isOffensive()) {
+                throw new IllegalStateException("Выражение не содержит обидных действий, но найдено обидное действие: " +
+                        action.getType().getDescription());
+            }
         }
 
         if (conveyedEmotion.getTarget() instanceof Marvin) {

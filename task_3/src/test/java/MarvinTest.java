@@ -1,6 +1,7 @@
 import com.task3.action.Action;
 import com.task3.action.ActionType;
 import com.task3.action.CalculationLevel;
+import com.task3.action.Observation;
 import com.task3.domain.Human;
 import com.task3.domain.Marvin;
 import com.task3.emotion.EmotionType;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -151,5 +153,71 @@ public class MarvinTest {
                         a.getType() == ActionType.INTONATION_MODULATION ||
                         a.getType() == ActionType.TIMBRE_MODULATION
         ));
+    }
+
+    //новые тесты
+    @Test
+    void marvinShouldNotExpressContemptThroughOffensiveActions() {
+        Action offensiveAction = new Action.Builder()
+                .type(ActionType.MOCKING_LAUGHTER) // обидное действие
+                .build();
+
+        EmotionalState contempt = new EmotionalState.Builder()
+                .addEmotion(EmotionType.CONTEMPT)
+                .target(humanity)
+                .build();
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            new Expression.Builder()
+                    .performer(marvin)
+                    .addAction(offensiveAction)
+                    .conveyedEmotion(contempt)
+                    .build();
+        });
+
+        assertTrue(exception.getMessage().contains("не содержит обидных действий"));
+    }
+
+    @Test
+    void marvinsSarcasmUnfoldsInSpecificOrder() {
+        // Марвин сначала делает паузу, затем модулирует интонацию и тембр
+
+        Expression expression = ExpressionFactory.createSarcasticExpression();
+        List<Action> actions = expression.getActions();
+
+        // Проверяем порядок
+        assertEquals(ActionType.PAUSE, actions.get(0).getType());
+
+        // Модуляции могут быть в любом порядке после паузы
+        List<ActionType> subsequentTypes = actions.subList(1, actions.size())
+                .stream()
+                .map(Action::getType)
+                .toList();
+
+        assertTrue(subsequentTypes.contains(ActionType.INTONATION_MODULATION));
+        assertTrue(subsequentTypes.contains(ActionType.TIMBRE_MODULATION));
+    }
+
+    @Test
+    void marvinExpressesContemptAfterObservingHumanity() {
+        // Создаем контекст: Марвин наблюдает глупое поведение человечества
+        Observation observation = new Observation(marvin, humanity, "человечество снова ведет себя бессмысленно");
+
+        // Проверяем, что это наблюдение действительно вызывает сарказм
+        assertTrue(observation.isSarcasticTrigger(),
+                "Наблюдение за глупым поведением людей должно вызывать сарказм");
+
+        // Марвин реагирует на наблюдение
+        Expression reaction = ExpressionFactory.createSarcasticExpression();
+
+        // Проверяем, что реакция соответствует наблюдению
+        assertTrue(reaction.getConveyedEmotion().containsEmotion(EmotionType.CONTEMPT),
+                "Марвин должен выражать презрение");
+        assertTrue(reaction.getConveyedEmotion().containsEmotion(EmotionType.HORROR),
+                "Марвин должен выражать ужас");
+        assertEquals(humanity, reaction.getConveyedEmotion().getTarget(),
+                "Презрение направлено на человечество");
+
+
     }
 }
