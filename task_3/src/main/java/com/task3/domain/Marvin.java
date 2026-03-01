@@ -23,9 +23,6 @@ public class Marvin extends Character {
         this.lastExpression = null;
     }
 
-    /**
-     * Марвин наблюдает за кем-то
-     */
     public Observation observe(Character target, String behavior) {
         Objects.requireNonNull(target, "Цель наблюдения не может быть null");
         Objects.requireNonNull(behavior, "Поведение не может быть null");
@@ -36,45 +33,39 @@ public class Marvin extends Character {
         return observation;
     }
 
-    /**
-     * Обновляет эмоциональное состояние на основе наблюдения
-     */
-    private void updateEmotionalState(Observation observation) {
-        // Логируем для отладки
-        System.out.println("Updating emotional state based on observation: " + observation);
-        System.out.println("isSarcasticTrigger: " + observation.isSarcasticTrigger());
-        System.out.println("Observed instance of Human: " + (observation.getObserved() instanceof Human));
 
-        // Проверяем, вызывает ли наблюдение сарказм (глупое поведение человечества)
+    private void updateEmotionalState(Observation observation) {
+
+        System.out.println("Обновляем эмоциональное состояние на основе наблюдений: " + observation);
+        System.out.println("Наличие триггера сарказма: " + observation.isSarcasticTrigger());
+        System.out.println("Наблюдаемый объект является экземпляром Human: " + (observation.getObserved() instanceof Human));
+
         if (observation.isSarcasticTrigger() &&
                 observation.getObserved() instanceof Human) {
 
-            // Создаем новое эмоциональное состояние с презрением и ужасом
+
             this.currentEmotionalState = new EmotionalState.Builder()
                     .addEmotions(EmotionType.CONTEMPT, EmotionType.HORROR)
                     .target(observation.getObserved())
                     .build();
 
-            System.out.println("Emotional state UPDATED: " + this.currentEmotionalState);
+            System.out.println("Эмоциональное состояние обновлено: " + this.currentEmotionalState);
         } else {
-            // Если условие не выполнено, сбрасываем состояние и логируем причину
             this.currentEmotionalState = null;
-            System.out.println("Condition not met. Emotional state reset to null.");
+            System.out.println("Условие не выполнено. Эмоциональное состояние сброшено в null");
 
-            // Дополнительная диагностика
+
             if (!observation.isSarcasticTrigger()) {
-                System.out.println("Reason: observation.isSarcasticTrigger() is false");
+                System.out.println("Причина: observation.isSarcasticTrigger() is false");
             }
             if (!(observation.getObserved() instanceof Human)) {
-                System.out.println("Reason: observed is not Human, it's " +
+                System.out.println("Причина: наблюдаемый объект не является Human, это " +
                         (observation.getObserved() == null ? "null" : observation.getObserved().getClass().getSimpleName()));
             }
         }
     }
 
-    /**
-     * Марвин выражает свое текущее эмоциональное состояние
-     */
+
     public Expression express() {
         if (currentEmotionalState == null) {
             throw new IllegalStateException("Марвин ничего не чувствует в данный момент");
@@ -84,64 +75,37 @@ public class Marvin extends Character {
         return lastExpression;
     }
 
-    /**
-     * Проверяет, испытывает ли Марвин презрение к кому-либо
-     */
+
     public boolean feelsContemptTowards(Character target) {
         return currentEmotionalState != null &&
                 currentEmotionalState.containsEmotion(EmotionType.CONTEMPT) &&
                 currentEmotionalState.getTarget().equals(target);
     }
 
-    /**
-     * Проверяет, испытывает ли Марвин ужас к кому-либо
-     */
+
     public boolean feelsHorrorTowards(Character target) {
         return currentEmotionalState != null &&
                 currentEmotionalState.containsEmotion(EmotionType.HORROR) &&
                 currentEmotionalState.getTarget().equals(target);
     }
 
-    /**
-     * Возвращает историю наблюдений (копию для защиты от изменений)
-     */
+
     public List<Observation> getObservationHistory() {
         return new ArrayList<>(observations);
     }
 
-    /**
-     * Возвращает текущее эмоциональное состояние
-     */
+
     public EmotionalState getCurrentEmotionalState() {
         return currentEmotionalState;
     }
 
-    /**
-     * Возвращает последнее выражение
-     */
-    public Expression getLastExpression() {
-        return lastExpression;
-    }
+    // Проверяет, наблюдал ли Марвин за указанным персонажем
 
-    /**
-     * Сбрасывает эмоциональное состояние Марвина
-     */
-    public void resetEmotionalState() {
-        this.currentEmotionalState = null;
-        this.lastExpression = null;
-    }
-
-    /**
-     * Проверяет, наблюдал ли Марвин за указанным персонажем
-     */
     public boolean hasObserved(Character target) {
         return observations.stream()
                 .anyMatch(obs -> obs.getObserved().equals(target));
     }
 
-    /**
-     * Возвращает количество наблюдений за указанным персонажем
-     */
     public long getObservationCountFor(Character target) {
         return observations.stream()
                 .filter(obs -> obs.getObserved().equals(target))

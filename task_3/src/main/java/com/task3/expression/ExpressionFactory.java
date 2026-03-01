@@ -37,9 +37,7 @@ public class ExpressionFactory {
                 .build();
     }
 
-    /**
-     * Новый метод: создает выражение на основе указанного эмоционального состояния
-     */
+   // создает выражение на основе указанного эмоционального состояния
     public static Expression createExpressionWithEmotion(Marvin marvin, EmotionalState emotion) {
 
         Action pause = new Action.Builder()
