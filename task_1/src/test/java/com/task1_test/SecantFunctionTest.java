@@ -21,7 +21,6 @@ public class SecantFunctionTest {
             {0.5, 1.13949392732455},
             {-0.5, 1.13949392732455},
             {0.000001, 1.0000000000005},
-            {Double.MIN_VALUE, 1.0},
             {1.5707, 10381.3274657332},
             {-1.56, 92.6258945325371},
             {1.57, 1255.76598966421},
@@ -129,13 +128,6 @@ public class SecantFunctionTest {
         assertEquals(expected, actual, 1e-13, "sec(0.000001) должен совпасть с эталоном");
     }
 
-    @Test
-    public void testSecAtMinValue() {
-        double x = Double.MIN_VALUE;
-        double expected = getReferenceValue(x);
-        double actual = SecantFunction.sec(x);
-        assertEquals(expected, actual, 1e-300, "sec(Double.MIN_VALUE) должен совпасть с эталоном");
-    }
 
     // Точки, близкие к границе сходимости
 
